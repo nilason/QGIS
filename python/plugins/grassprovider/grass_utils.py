@@ -122,13 +122,12 @@ class GrassUtils:
             startupinfo=si if isWindows() else None,
         ) as proc:
             try:
-                lines = proc.stdout.readlines()
-                for line in lines:
-                    if "GRASS GIS " in line:
-                        line = line.split(" ")[-1].strip()
-                        if line.startswith("7.") or line.startswith("8."):
-                            GrassUtils.version = line
-                            return GrassUtils.version
+                line = proc.stdout.readline()
+                if "GRASS " in line:
+                    line = line.split(" ")[-1].strip()
+                    if line.startswith("7.") or line.startswith("8."):
+                        GrassUtils.version = line
+                        return GrassUtils.version
             except Exception:
                 pass
 
