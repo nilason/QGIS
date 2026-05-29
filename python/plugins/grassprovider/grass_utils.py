@@ -140,6 +140,7 @@ class GrassUtils:
             "Processing",
             Qgis.MessageLevel.Critical,
         )
+        raise Exception(f"!!! GRASS version output:\n{output}")
 
         return None
 
