@@ -106,6 +106,8 @@ class GrassUtils:
         if GrassUtils.grassBin() is None:
             return None
 
+        output = []
+
         # Launch GRASS command with -v parameter
         # For MS-Windows, hide the console
         if isWindows():
@@ -123,8 +125,9 @@ class GrassUtils:
         ) as proc:
             try:
                 lines = proc.stdout.readlines()
+                output = output + lines
                 for line in lines:
-                    if "GRASS GIS " in line:
+                    if "GRASSX GIS " in line:
                         line = line.split(" ")[-1].strip()
                         if line.startswith("7.") or line.startswith("8."):
                             GrassUtils.version = line
@@ -132,7 +135,13 @@ class GrassUtils:
             except Exception:
                 pass
 
-        return None
+        QgsMessageLog.logMessage(
+            f"!!! GRASS version output:\n{output}",
+            "Processing",
+            Qgis.MessageLevel.Critical,
+        )
+        outp = f"!!! GRASS version output:\n{output}"
+        return outp
 
     @staticmethod
     def grassBin():
